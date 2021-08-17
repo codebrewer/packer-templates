@@ -1,0 +1,14 @@
+{
+  "name": "NAME",
+  "versions": [
+    {
+      "version": "VERSION",
+      "providers": [
+        {
+          "name": "PROVIDER",
+          "url": "URL"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+
+set -u
+
+err() {
+  echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2
+}
+
+usage() {
+  cat <<EOF >&2
+Usage: $(basename "$0") template provider username version
+
+template := a relative or absolute path to a packer template
+provider := the name of a Vagrant provider
+username := the username under which to add the box to Vagrant
+version := the version string to assign the box when adding to Vagrant
+EOF
+}
+
+if [[ ${#} -lt 4 ]]; then
+  usage
+  exit 1
+fi
+
+readonly template=${1}
+readonly provider=${2}
+readonly username=${3}
+readonly version=${4}
+
+if ! [[ -r ${template} ]]; then
+  err "template \"${template}\" does not exist or is not a readable file"
+  exit 1
+fi
+
+if [[ ! ${provider} ]]; then
+  err "provider should not be empty"
+  exit 1
+fi
+
+if [[ ! ${username} ]]; then
+  err "username should not be empty"
+  exit 1
+fi
+
+if [[ ! ${version} ]]; then
+  err "version should not be empty"
+  exit 1
+fi
+
+command -v jq >/dev/null 2>&1 || { err "jq required but not found. Aborting."; exit 1; }
+command -v vagrant >/dev/null 2>&1 || { err "vagrant required but not found. Aborting."; exit 1; }
+
+readonly box_basename=$(jq --raw-output '.variables.box_basename' ${template})
+
+if [[  ! ${box_basename} || ${box_basename} == "null" ]]; then
+  err "could not read variables.box_basename from template \"${template}\""
+  exit 1
+fi
+
+readonly box_file=$(pwd)/builds/${box_basename}.${provider}.box
+
+if ! [[ -r ${box_file} ]]; then
+  err "box \"${box_file}\" does not exist or is not a readable file"
+  exit 1
+fi
+
+sed -e s_NAME_${username}/${box_basename}_ packer_templates/metadata-template.json \
+  | sed -e s/VERSION/${version}/ \
+  | sed -e s/PROVIDER/${provider}/ \
+  | sed -e s_URL_file://${box_file}_ \
+  | jq . >builds/metadata.json
+
+vagrant box add builds/metadata.json
