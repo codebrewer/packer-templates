@@ -7,8 +7,8 @@ Packer templates built on or inspired by [chef/bento](https://github.com/chef/be
 This project was motivated by the need for a simple, bandwidth-friendly way to provision multiple Parallels VMs to build
 a [Cassandra](https://cassandra.apache.org/_/index.html) cluster for general messing around. Having a base image
 containing Cassandra pre-installed and needing only configuration to bring a cluster node up seemed a better option than
-continually provisioning VMs from a generic base image and downloading and installing Cassandra each time (or setting up
-local Linux package and Docker image caches).
+continually provisioning VMs from a generic base image and downloading and installing Docker and/or Cassandra each time
+(or setting up local Linux package and Docker image caches).
 
 ## General Approach
 
@@ -84,3 +84,7 @@ bento/ubuntu-18.04                      (parallels, 201912.04.0)
 bento/ubuntu-20.04                      (parallels, 202107.08.0)
 codebrewer/ubuntu-20.04-cassandra-4.0.0 (parallels, 202108.13.0)
 ```
+
+## Licensing
+
+This software is licensed under the Apache License Version 2.0. Please see [LICENSE](LICENSE) for details.
