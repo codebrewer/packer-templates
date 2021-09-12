@@ -24,8 +24,8 @@ Templates provided by Bento are copied and modified to accommodate the required 
 
 ```bash
 $ mkdir -p packer_templates/ubuntu
-$ cp bento/packer_templates/ubuntu/ubuntu-20.04-amd64.json packer_templates/ubuntu/ubuntu-20.04-cassandra-4.0.0-amd64.json
-$ nano -w packer_templates/ubuntu/ubuntu-20.04-cassandra-4.0.0-amd64.json
+$ cp bento/packer_templates/ubuntu/ubuntu-20.04-amd64.json packer_templates/ubuntu/ubuntu-20.04-cassandra-4.0-amd64.json
+$ nano -w packer_templates/ubuntu/ubuntu-20.04-cassandra-4.0-amd64.json
 ```
 
 ## Templates Provided
@@ -35,7 +35,7 @@ $ nano -w packer_templates/ubuntu/ubuntu-20.04-cassandra-4.0.0-amd64.json
 > :warning: **The Ubuntu CD image `ubuntu-20.04.1-legacy-server-amd64.iso` on which this box is based is no longer available for download**
 
 The [Ubuntu 20.04 LTS template](bento/packer_templates/ubuntu/ubuntu-20.04-amd64.json) has been used as a
-[starting point](packer_templates/ubuntu/ubuntu-20.04-cassandra-4.0.0-amd64.json) and a script added to install
+[starting point](packer_templates/ubuntu/ubuntu-20.04-cassandra-4.0-amd64.json) and a script added to install
 [Docker](https://www.docker.com) (following the process given [here](https://docs.docker.com/engine/install/ubuntu/))
 and pull [a Cassandra image](https://hub.docker.com/_/cassandra).
 
@@ -56,7 +56,7 @@ To build an Ubuntu 20.04 box including Dockerized Cassandra for only the Paralle
 
 ```bash
 $ cd packer_templates/ubuntu
-$ packer build -only=parallels-iso ubuntu-20.04-cassandra-amd64.json
+$ packer build -only=parallels-iso ubuntu-20.04-cassandra-4.0-amd64.json
 ```
 
 ## Installing Boxes
@@ -77,19 +77,19 @@ version := the version string to assign the box when adding to Vagrant
 Example using the versioning approach inferred from Bento:
 
 ```bash
-$ ./install-box packer_templates/ubuntu/ubuntu-20.04-cassandra-4.0.0-amd64.json parallels codebrewer 202108.13.0
+$ ./install-box packer_templates/ubuntu/ubuntu-20.04-cassandra-4.0-amd64.json parallels codebrewer 202109.12.0
 ==> box: Loading metadata for box 'builds/metadata.json'
 ...
-==> box: Successfully added box 'codebrewer/ubuntu-20.04-cassandra-4.0.0' (v202108.13.0) for 'parallels'!
+==> box: Successfully added box 'codebrewer/ubuntu-20.04-cassandra-4.0' (v202109.12.0) for 'parallels'!
 ```
 
 If successful, the new box is listed along with any others already added:
 
 ```bash
 $ vagrant box list
-bento/ubuntu-18.04                      (parallels, 201912.04.0)
-bento/ubuntu-20.04                      (parallels, 202107.08.0)
-codebrewer/ubuntu-20.04-cassandra-4.0.0 (parallels, 202108.13.0)
+bento/ubuntu-18.04                    (parallels, 201912.04.0)
+bento/ubuntu-20.04                    (parallels, 202107.08.0)
+codebrewer/ubuntu-20.04-cassandra-4.0 (parallels, 202109.12.0)
 ```
 
 ## Licensing
