@@ -13,7 +13,12 @@ continually provisioning VMs from a generic base image and downloading and insta
 ## General Approach
 
 The [chef/bento](https://github.com/chef/bento) repository has been added as a submodule with the goal of making it
-easier to keep up to date with upstream changes than would be the case with forking and applying local changes.
+easier to keep up to date with upstream changes than would be the case with forking and applying local changes. Check
+this module out by running a command such as the following from the root of this repository:
+
+```bash
+$ git submodule update --init --recursive
+```
 
 Templates provided by Bento are copied and modified to accommodate the required changes, _e.g._:
 
@@ -26,6 +31,8 @@ $ nano -w packer_templates/ubuntu/ubuntu-20.04-cassandra-4.0.0-amd64.json
 ## Templates Provided
 
 ### Ubuntu 20.04 LTS + Dockerized Cassandra
+
+> :warning: **The Ubuntu CD image `ubuntu-20.04.1-legacy-server-amd64.iso` on which this box is based is no longer available for download**
 
 The [Ubuntu 20.04 LTS template](bento/packer_templates/ubuntu/ubuntu-20.04-amd64.json) has been used as a
 [starting point](packer_templates/ubuntu/ubuntu-20.04-cassandra-4.0.0-amd64.json) and a script added to install
