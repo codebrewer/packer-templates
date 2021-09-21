@@ -28,7 +28,23 @@ $ cp bento/packer_templates/ubuntu/ubuntu-20.04-amd64.json packer_templates/ubun
 $ nano -w packer_templates/ubuntu/ubuntu-20.04-cassandra-4.0-amd64.json
 ```
 
+Comparing the original and provided templates shows that some user variables have been added or modified and the paths
+to the Bento-provided provisioning scripts changed so that they're found within the Git submodule when `packer` is run
+in the directory containing the modified script.
+
 ## Templates Provided
+
+### Debian 11.0 + Dockerized Cassandra
+
+The [Debian 11.0 amd64 template](bento/packer_templates/debian/debian-11.0-amd64.json) has been used as a
+[starting point](packer_templates/debian/debian-11.0-cassandra-4.0-amd64.json) and a script added to install
+[Docker](https://www.docker.com) (following the process given [here](https://docs.docker.com/engine/install/debian/))
+and pull [a Cassandra image](https://hub.docker.com/_/cassandra).
+
+Other options for
+[installing Cassandra](https://cassandra.apache.org/doc/latest/cassandra/getting_started/installing.html) exist but
+using containers within a VM allows flexibility in setting up a cluster _e.g._ a VM could model a data centre while a
+bunch of containers could model a rack.
 
 ### Ubuntu 20.04 LTS + Dockerized Cassandra
 
@@ -44,19 +60,15 @@ Other options for
 using containers within a VM allows flexibility in setting up a cluster _e.g._ a VM could model a data centre while a
 bunch of containers could model a rack.
 
-Comparing the original and modified templates shows that some user variables have been added or modified and the paths
-to the Bento-provided provisioning scripts changed so that they're found within the Git submodule when `packer` is run
-in the directory containing the modified script.
-
 ## Building Boxes
 
 The requirements for building boxes are [listed in the Bento README](bento/README.md#requirements).
 
-To build an Ubuntu 20.04 box including Dockerized Cassandra for only the Parallels provider:
+To build a Debian 11.0 box including Dockerized Cassandra for only the Parallels provider:
 
 ```bash
-$ cd packer_templates/ubuntu
-$ packer build -only=parallels-iso ubuntu-20.04-cassandra-4.0-amd64.json
+$ cd packer_templates/debian
+$ packer build -only=parallels-iso debian-11.0-cassandra-4.0-amd64.json
 ```
 
 ## Installing Boxes
@@ -77,10 +89,10 @@ version := the version string to assign the box when adding to Vagrant
 Example using the versioning approach inferred from Bento:
 
 ```bash
-$ ./install-box packer_templates/ubuntu/ubuntu-20.04-cassandra-4.0-amd64.json parallels codebrewer 202109.12.0
+$ ./install-box packer_templates/debian/debian-11.0-cassandra-4.0-amd64.json parallels codebrewer 202109.20.0
 ==> box: Loading metadata for box 'builds/metadata.json'
 ...
-==> box: Successfully added box 'codebrewer/ubuntu-20.04-cassandra-4.0' (v202109.12.0) for 'parallels'!
+==> box: Successfully added box 'codebrewer/debian-11.0-cassandra-4.0' (v202109.20.0) for 'parallels'!
 ```
 
 If successful, the new box is listed along with any others already added:
@@ -89,6 +101,7 @@ If successful, the new box is listed along with any others already added:
 $ vagrant box list
 bento/ubuntu-18.04                    (parallels, 201912.04.0)
 bento/ubuntu-20.04                    (parallels, 202107.08.0)
+codebrewer/debian-11.0-cassandra-4.0  (parallels, 202109.20.0)
 codebrewer/ubuntu-20.04-cassandra-4.0 (parallels, 202109.12.0)
 ```
 
